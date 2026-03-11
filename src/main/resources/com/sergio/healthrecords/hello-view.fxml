@@ -24,7 +24,19 @@
         <tabs>
           <Tab text="Search Patient">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="555.0" prefWidth="816.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="555.0" prefWidth="816.0">
+                     <children>
+                        <TextField fx:id="searchField" layoutX="302.0" layoutY="20.0" prefHeight="25.0" prefWidth="389.0" />
+                        <Button layoutX="711.0" layoutY="20.0" mnemonicParsing="false" text="Search" />
+                        <TableView fx:id="patientTable" layoutX="302.0" layoutY="77.0" prefHeight="457.0" prefWidth="461.0">
+                          <columns>
+                            <TableColumn fx:id="colId" prefWidth="51.0" text="ID" />
+                            <TableColumn fx:id="colFirstName" prefWidth="222.0" text="First name" />
+                              <TableColumn  fx:id="colLastName" prefWidth="187.0" text="Last name" />
+                          </columns>
+                        </TableView>
+                        <Button layoutX="466.0" layoutY="554.0" mnemonicParsing="false" text="View selected patient " />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Add Patient">
@@ -41,15 +53,15 @@
                                              <children>
                                                 <TextField fx:id="firstName" prefHeight="25.0" prefWidth="149.0" />
                                                 <ChoiceBox fx:id="gender" prefHeight="25.0" prefWidth="114.0" />
-                                                <TextField layoutX="10.0" layoutY="10.0" prefHeight="66.0" prefWidth="174.0" />
-                                                <TextField layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="149.0" />
-                                                <TextField layoutX="10.0" layoutY="156.0" prefHeight="25.0" prefWidth="149.0" />
+                                                <TextField fx:id="addressTwo" layoutX="10.0" layoutY="10.0" prefHeight="66.0" prefWidth="174.0" />
+                                                <TextField fx:id="state" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="149.0" />
+                                                <TextField fx:id="country" layoutX="10.0" layoutY="156.0" prefHeight="25.0" prefWidth="149.0" />
                                                 <Label fx:id="age">
                                                    <VBox.margin>
                                                       <Insets top="7.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <TextField layoutX="10.0" layoutY="191.0" prefHeight="25.0" prefWidth="149.0" />
+                                                <TextField fx:id="phone" layoutX="10.0" layoutY="191.0" prefHeight="25.0" prefWidth="149.0" />
                                              </children>
                                           </VBox>
                                           <VBox layoutX="14.0" layoutY="33.0" prefHeight="320.0" prefWidth="105.0" spacing="10.0">
@@ -71,12 +83,12 @@
                                           <VBox layoutX="119.0" layoutY="33.0" prefHeight="288.0" prefWidth="206.0" spacing="10.0">
                                              <children>
                                                 <TextField fx:id="lastName" prefHeight="25.0" prefWidth="149.0" />
-                                                <TextField layoutX="10.0" layoutY="10.0" />
-                                                <TextField alignment="TOP_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="68.0" prefWidth="206.0" />
-                                                <TextField layoutX="10.0" layoutY="45.0" />
-                                                <TextField layoutX="10.0" layoutY="158.0" />
+                                                <TextField fx:id="middleName" layoutX="10.0" layoutY="10.0" />
+                                                <TextField fx:id="addressOne" alignment="TOP_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="68.0" prefWidth="206.0" />
+                                                <TextField fx:id="city" layoutX="10.0" layoutY="45.0" />
+                                                <TextField fx:id="zip" layoutX="10.0" layoutY="158.0" />
                                                 <DatePicker fx:id="birthDate" onAction="#set_BirthDate" />
-                                                <TextField layoutX="10.0" layoutY="193.0" />
+                                                <TextField fx:id="email" layoutX="10.0" layoutY="193.0" />
                                              </children>
                                           </VBox>
                                           <VBox layoutX="313.0" layoutY="33.0" prefHeight="318.0" prefWidth="105.0" spacing="10.0">
@@ -95,16 +107,17 @@
                                                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="263.0" prefHeight="25.0" prefWidth="103.0" text="Weight" />
                                              </children>
                                           </VBox>
-                                          <TextField layoutX="423.0" layoutY="320.0" prefHeight="25.0" prefWidth="41.0" />
-                                          <TextField layoutX="119.0" layoutY="320.0" prefHeight="25.0" prefWidth="41.0" />
+                                          <TextField fx:id="weight" layoutX="423.0" layoutY="320.0" prefHeight="25.0" prefWidth="41.0" />
+                                          <TextField fx:id="height" layoutX="119.0" layoutY="320.0" prefHeight="25.0" prefWidth="41.0" />
                                           <Label layoutX="163.0" layoutY="324.0" text="in." />
                                           <Label layoutX="473.0" layoutY="324.0" text="lbs." />
-                                          <RadioButton layoutX="76.0" layoutY="365.0" mnemonicParsing="false" text="Alive">
+                                          <RadioButton fx:id="alive" layoutX="76.0" layoutY="365.0" mnemonicParsing="false" text="Alive">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="lifestatus" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton layoutX="179.0" layoutY="365.0" mnemonicParsing="false" text="Deceased" toggleGroup="$lifestatus" />
+                                          <RadioButton fx:id="deceased" layoutX="179.0" layoutY="365.0" mnemonicParsing="false" text="Deceased" toggleGroup="$lifestatus" />
+                                          <Button layoutX="513.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -151,22 +164,48 @@
                                                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="103.0" text="Allergies" />
                                                 <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="18.0" layoutY="10.0" prefHeight="25.0" prefWidth="103.0" text="Chronic conditions">
                                                    <VBox.margin>
-                                                      <Insets top="180.0" />
+                                                      <Insets top="220.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="18.0" layoutY="225.0" prefHeight="25.0" prefWidth="103.0" text="Family history">
+                                                   <VBox.margin>
+                                                      <Insets top="130.0" />
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
                                           </VBox>
                                           <TextArea layoutX="121.0" layoutY="43.0" prefHeight="200.0" prefWidth="291.0" />
-                                          <TableView editable="true" layoutX="585.0" layoutY="43.0" prefHeight="200.0" prefWidth="216.0">
+                                           <TextField fx:id="procedureInputText" layoutX="585" layoutY="251" promptText="Procedure Name" />
+                                           <DatePicker fx:id="procedureDatePick" layoutX="585.0" layoutY="285.0" prefWidth="120" />
+                                           <Button layoutX="585.0" layoutY="317.0" mnemonicParsing="false" onAction="#addProcedure" text="Add procedure" />
+                                           <TableView fx:id="surgeryTable" editable="true" layoutX="585" layoutY="43" prefHeight="200.0" prefWidth="216.0">
+                                               <columns>
+                                                   <TableColumn fx:id="procCol" prefWidth="147.0" text="Procedure" />
+                                                   <TableColumn fx:id="dateCol" minWidth="0.0" prefWidth="68.0" text="Date" />
+                                               </columns>
+                                           </TableView>
+                                          <Pane fx:id="chronicConditionsPane" layoutX="121.0" layoutY="281.0" prefHeight="34.0" prefWidth="200.0" />
+                                          <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="472.0" layoutY="43.0" prefHeight="25.0" prefWidth="103.0" text="Surgical history" />
+                                          <TextArea layoutX="121.0" layoutY="437.0" prefHeight="200.0" prefWidth="291.0" />
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab text="4. Medications">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView layoutX="243.0" layoutY="14.0" prefHeight="498.0" prefWidth="562.0">
                                             <columns>
-                                              <TableColumn prefWidth="147.0" text="Procedure" />
-                                              <TableColumn minWidth="0.0" prefWidth="68.0" text="Year" />
+                                              <TableColumn prefWidth="117.0" text="Name" />
+                                              <TableColumn minWidth="0.0" prefWidth="65.0" text="Dosage" />
+                                                <TableColumn prefWidth="74.0" text="Frequency" />
+                                                <TableColumn prefWidth="84.0" text="Pharmacy" />
+                                                <TableColumn prefWidth="110.0" text="Start date" />
+                                                <TableColumn minWidth="0.0" prefWidth="113.0" text="Endate" />
                                             </columns>
                                           </TableView>
-                                          <Pane fx:id="chronicConditionsPane" layoutX="121.0" layoutY="263.0" prefHeight="200.0" prefWidth="200.0" />
-                                          <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="472.0" layoutY="43.0" prefHeight="25.0" prefWidth="103.0" text="Surgical history" />
-                                          <Button layoutX="645.0" layoutY="251.0" mnemonicParsing="false" text="Add procedure" />
-                                       </children></AnchorPane>
+                                       </children>
+                                    </AnchorPane>
                                 </content>
                               </Tab>
                           </tabs>

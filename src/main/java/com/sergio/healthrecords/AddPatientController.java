@@ -1,9 +1,13 @@
 package com.sergio.healthrecords;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
@@ -21,11 +25,28 @@ import java.util.ResourceBundle;
 
 // 1. Implement Initializable
 public class AddPatientController implements Initializable {
+
+    // Patient
     @FXML private TextField firstName;
     @FXML private TextField lastName;
+    @FXML private TextField middleName;
     @FXML private ChoiceBox<String> gender;
     @FXML private Label age;
     @FXML private DatePicker birthDate;
+    @FXML private TextField addressOne;
+    @FXML private TextField addressTwo;
+    @FXML private TextField city;
+    @FXML private TextField state;
+    @FXML private TextField zip;
+    @FXML private TextField country;
+    @FXML private TextField email;
+    @FXML private TextField phone;
+    @FXML private TextField height;
+    @FXML private TextField weight;
+    @FXML private RadioButton alive;
+    @FXML private RadioButton deceased;
+
+    // Insurance
     @FXML private ChoiceBox<String> payorRelationship;
     @FXML private ComboBox<String> primaryPayor;
     @FXML private DatePicker subscriberBirthDate;
@@ -35,13 +56,28 @@ public class AddPatientController implements Initializable {
     @FXML private TextField subscriberLastName;
     @FXML private DatePicker planEffectiveDate;
     @FXML private DatePicker planExpiryDate;
+
+    //Medical history
     @FXML private Pane chronicConditionsPane;
     private CheckComboBox<String> chronicConditions;
+    @FXML private TableView<Surgery> surgeryTable;
+    @FXML private TableColumn<Surgery, String> procCol;
+    @FXML private TableColumn<Surgery, LocalDate> dateCol;
+    @FXML private TextField procedureInputText;
+    @FXML private DatePicker procedureDatePick;
+
+    //Search
+    @FXML private TableView<Patient> patientTable;
+    @FXML private TextField searchField;
+    private ObservableList<Patient> masterData = FXCollections.observableArrayList();
+    @FXML private TableColumn<Patient, String> colId;
+    @FXML private TableColumn<Patient, String> colFirstName;
+    @FXML private TableColumn<Patient, String> colLastName;
+
 
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         gender.getItems().addAll("Male", "Female");
         primaryPayor.getItems().addAll(
                 "Self",
@@ -106,6 +142,14 @@ public class AddPatientController implements Initializable {
             }
         });
 
+        procCol.setCellValueFactory(new PropertyValueFactory<>("procedure"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        surgeryTable.setEditable(true);
+        procCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        procCol.setOnEditCommit(event -> {
+            Surgery surgery = event.getRowValue();
+            surgery.setProcedure(event.getNewValue());
+        });
 
 
         Callback<DatePicker, DateCell> dayCellFactory = new Callback<>() {
@@ -127,10 +171,79 @@ public class AddPatientController implements Initializable {
         };
         birthDate.setDayCellFactory(dayCellFactory);
         subscriberBirthDate.setDayCellFactory(dayCellFactory);
+
+
+
+
+
+
+       //Search
+        // 1. Link Columns to Model Properties
+        colId.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        colFirstName.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+        colLastName.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+
+        // 2. Load from DB
+        DatabaseHelper db = new DatabaseHelper();
+        masterData.addAll(db.getAllPatients());
+
+        // 3. Setup FilteredList
+        FilteredList<Patient> filteredData = new FilteredList<>(masterData, p -> true);
+
+        // 4. Connect listener
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredData.setPredicate(patient -> {
+                if (newVal == null || newVal.isEmpty()) return true;
+                String lower = newVal.toLowerCase();
+                return patient.getFirstName().toLowerCase().contains(lower) ||
+                        patient.getLastName().toLowerCase().contains(lower);
+            });
+        });
+
+        patientTable.setItems(filteredData);
     }
+
+
+
+
+
+
 
     public void set_BirthDate() {
         LocalDate currentDate = LocalDate.now();
         age.setText(String.valueOf(Period.between((birthDate.getValue()), currentDate).getYears()));
     }
+
+    @FXML
+    private void addProcedure() {
+        Surgery newSurgery = new Surgery(procedureInputText.getText(), procedureDatePick.getValue());
+        surgeryTable.getItems().add(newSurgery);
+        procedureInputText.clear();
+        procedureDatePick.setValue(null);
+    }
+
+    @FXML
+    private void handleSaveButton() {
+        DatabaseHelper db = new DatabaseHelper();
+
+        // Determine status from RadioButtons
+        String status = alive.isSelected() ? "Alive" : "Deceased";
+
+        db.savePatient(
+                firstName.getText(),
+                middleName.getText(),
+                lastName.getText(),
+                gender.getValue(),
+                birthDate.getValue() != null ? birthDate.getValue().toString() : "",
+                age.getText(),
+                email.getText(),
+                phone.getText(),
+                height.getText(),
+                weight.getText(),
+                addressOne.getText(),
+                addressTwo.getText(),
+                status
+        );
+    }
+
 }

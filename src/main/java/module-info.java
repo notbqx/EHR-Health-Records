@@ -6,6 +6,7 @@ module com.sergio.healthrecords {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
+    requires javafx.base;
 
     opens com.sergio.healthrecords to javafx.fxml;
     exports com.sergio.healthrecords;
