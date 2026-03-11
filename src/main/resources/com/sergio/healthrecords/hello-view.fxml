@@ -3,11 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -101,17 +105,70 @@
                                              </toggleGroup>
                                           </RadioButton>
                                           <RadioButton layoutX="179.0" layoutY="365.0" mnemonicParsing="false" text="Deceased" toggleGroup="$lifestatus" />
-                                          <Button layoutX="690.0" layoutY="432.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Submit" />
-                                          <Button layoutX="565.0" layoutY="432.0" mnemonicParsing="false" onAction="#getLastPatient" text="Get" />
                                        </children>
                                     </AnchorPane>
                               </content>
                             </Tab>
-                            <Tab text="Untitled Tab 2">
+                            <Tab text="2. Insurance">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox alignment="TOP_RIGHT" layoutX="-8.0" layoutY="46.0" prefHeight="320.0" prefWidth="167.0" spacing="10.0">
+                                             <children>
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="103.0" text="Primary payor" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="103.0" text="Policy number" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="45.0" prefHeight="25.0" prefWidth="103.0" text="Group number" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="80.0" prefHeight="25.0" prefWidth="119.0" text="Subscriber first name" textAlignment="RIGHT" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="58.0" layoutY="115.0" prefHeight="25.0" prefWidth="119.0" text="Subscriber last name" textAlignment="RIGHT" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="74.0" layoutY="115.0" prefHeight="25.0" prefWidth="142.0" text="Subscriber date of birth" textAlignment="RIGHT" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="115.0" prefHeight="25.0" prefWidth="168.0" text="Relationship to patient" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="185.0" prefHeight="25.0" prefWidth="168.0" text="Plan effective date" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="220.0" prefHeight="25.0" prefWidth="168.0" text="Plan expiry date" />
+                                             </children>
+                                          </VBox>
+                                          <VBox layoutX="168.0" layoutY="46.0" prefHeight="320.0" prefWidth="162.0" spacing="10.0">
+                                             <children>
+                                                <ComboBox fx:id="primaryPayor" prefHeight="25.0" prefWidth="99.0" />
+                                                <TextField fx:id="policyNumber" />
+                                                <TextField fx:id="groupNumber" layoutX="10.0" layoutY="45.0" />
+                                                <TextField fx:id="subscriberFirstName" layoutX="10.0" layoutY="80.0" />
+                                                <TextField fx:id="subscriberLastName" layoutX="10.0" layoutY="115.0" />
+                                                <DatePicker fx:id="subscriberBirthDate" />
+                                                <ChoiceBox fx:id="payorRelationship" prefWidth="150.0" />
+                                                <DatePicker fx:id="planEffectiveDate" />
+                                                <DatePicker fx:id="planExpiryDate" layoutX="10.0" layoutY="220.0" />
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
+                              <Tab text="3. Medical history">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox alignment="TOP_RIGHT" layoutY="43.0" prefHeight="320.0" prefWidth="111.0" spacing="10.0">
+                                             <children>
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="103.0" text="Allergies" />
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="18.0" layoutY="10.0" prefHeight="25.0" prefWidth="103.0" text="Chronic conditions">
+                                                   <VBox.margin>
+                                                      <Insets top="180.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <TextArea layoutX="121.0" layoutY="43.0" prefHeight="200.0" prefWidth="291.0" />
+                                          <TableView editable="true" layoutX="585.0" layoutY="43.0" prefHeight="200.0" prefWidth="216.0">
+                                            <columns>
+                                              <TableColumn prefWidth="147.0" text="Procedure" />
+                                              <TableColumn minWidth="0.0" prefWidth="68.0" text="Year" />
+                                            </columns>
+                                          </TableView>
+                                          <Pane fx:id="chronicConditionsPane" layoutX="121.0" layoutY="263.0" prefHeight="200.0" prefWidth="200.0" />
+                                          <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="472.0" layoutY="43.0" prefHeight="25.0" prefWidth="103.0" text="Surgical history" />
+                                          <Button layoutX="645.0" layoutY="251.0" mnemonicParsing="false" text="Add procedure" />
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
                           </tabs>
                         </TabPane>
                      </children>
