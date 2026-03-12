@@ -20,7 +20,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="766.0" prefWidth="1064.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sergio.healthrecords.AddPatientController">
    <children>
-      <TabPane prefHeight="766.0" prefWidth="1064.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="766.0" prefWidth="1064.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Search Patient">
             <content>
@@ -32,14 +32,14 @@
                           <columns>
                             <TableColumn fx:id="colId" prefWidth="51.0" text="ID" />
                             <TableColumn fx:id="colFirstName" prefWidth="222.0" text="First name" />
-                              <TableColumn  fx:id="colLastName" prefWidth="187.0" text="Last name" />
+                              <TableColumn fx:id="colLastName" prefWidth="187.0" text="Last name" />
                           </columns>
                         </TableView>
-                        <Button layoutX="466.0" layoutY="554.0" mnemonicParsing="false" text="View selected patient " />
+                        <Button layoutX="466.0" layoutY="554.0" mnemonicParsing="false" onAction="#handleViewSelectedPatient" text="View selected patient " />
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab text="Add Patient">
+          <Tab fx:id="addPatientTab" onSelectionChanged="#stopEditing" text="Add/Edit Patient">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -117,7 +117,6 @@
                                              </toggleGroup>
                                           </RadioButton>
                                           <RadioButton fx:id="deceased" layoutX="179.0" layoutY="365.0" mnemonicParsing="false" text="Deceased" toggleGroup="$lifestatus" />
-                                          <Button layoutX="513.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -174,7 +173,7 @@
                                                 </Label>
                                              </children>
                                           </VBox>
-                                          <TextArea layoutX="121.0" layoutY="43.0" prefHeight="200.0" prefWidth="291.0" />
+                                          <TextArea fx:id="allergies" layoutX="121.0" layoutY="43.0" prefHeight="200.0" prefWidth="291.0" wrapText="true" />
                                            <TextField fx:id="procedureInputText" layoutX="585" layoutY="251" promptText="Procedure Name" />
                                            <DatePicker fx:id="procedureDatePick" layoutX="585.0" layoutY="285.0" prefWidth="120" />
                                            <Button layoutX="585.0" layoutY="317.0" mnemonicParsing="false" onAction="#addProcedure" text="Add procedure" />
@@ -186,7 +185,7 @@
                                            </TableView>
                                           <Pane fx:id="chronicConditionsPane" layoutX="121.0" layoutY="281.0" prefHeight="34.0" prefWidth="200.0" />
                                           <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="472.0" layoutY="43.0" prefHeight="25.0" prefWidth="103.0" text="Surgical history" />
-                                          <TextArea layoutX="121.0" layoutY="437.0" prefHeight="200.0" prefWidth="291.0" />
+                                          <TextArea fx:id="familyHistory" layoutX="121.0" layoutY="437.0" prefHeight="200.0" prefWidth="291.0" wrapText="true" />
                                        </children></AnchorPane>
                                 </content>
                               </Tab>
@@ -194,19 +193,28 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView layoutX="243.0" layoutY="14.0" prefHeight="498.0" prefWidth="562.0">
+                                          <TableView fx:id="medicationTable" editable="true" layoutX="243.0" layoutY="14.0" prefHeight="498.0" prefWidth="562.0">
                                             <columns>
-                                              <TableColumn prefWidth="117.0" text="Name" />
-                                              <TableColumn minWidth="0.0" prefWidth="65.0" text="Dosage" />
-                                                <TableColumn prefWidth="74.0" text="Frequency" />
-                                                <TableColumn prefWidth="84.0" text="Pharmacy" />
-                                                <TableColumn prefWidth="110.0" text="Start date" />
-                                                <TableColumn minWidth="0.0" prefWidth="113.0" text="Endate" />
+                                              <TableColumn fx:id="colMedName" prefWidth="117.0" text="Name" />
+                                              <TableColumn fx:id="colDosage" minWidth="0.0" prefWidth="65.0" text="Dosage" />
+                                                <TableColumn fx:id="colFreq" prefWidth="74.0" text="Frequency" />
+                                                <TableColumn fx:id="colPharm" prefWidth="84.0" text="Pharmacy" />
+                                                <TableColumn fx:id="colStart" prefWidth="110.0" text="Start date" />
+                                                <TableColumn fx:id="colEnd" minWidth="0.0" prefWidth="113.0" text="Endate" />
                                             </columns>
                                           </TableView>
                                        </children>
                                     </AnchorPane>
                                 </content>
+                              </Tab>
+                              <Tab text="5. Save">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="saveButton" layoutX="377.0" layoutY="52.0" mnemonicParsing="false" onAction="#handleSaveButton" prefHeight="25.0" prefWidth="310.0" text="Save new patient" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
                               </Tab>
                           </tabs>
                         </TabPane>
